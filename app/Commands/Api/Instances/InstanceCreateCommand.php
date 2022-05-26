@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Commands\Api;
+namespace App\Commands\Api\Instances;
 
 use App\Clients\Factories\InstanceFactory;
 use App\Clients\Requests\CreateInstance;
@@ -77,6 +77,10 @@ final class InstanceCreateCommand extends AmezmoCommand
                 question: "What password fo you want to use?",
                 default: null,
             ),
+        );
+
+        $this->info(
+            string: 'Requesting new Instance to be created now.'
         );
 
         try {

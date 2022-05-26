@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Commands\Api;
+namespace App\Commands\Api\Instances;
 
 use App\Commands\AmezmoCommand;
 use Throwable;

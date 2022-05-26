@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Commands\Api;
+namespace App\Commands\Api\Instances;
 
 use App\Clients\DataObjects\Instance;
-use App\Commands\AmezmoCommand;;
+use App\Commands\AmezmoCommand;
+
+;
 
 final class InstancesListCommand extends AmezmoCommand
 {

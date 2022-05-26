@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Commands\Api;
+namespace App\Commands\Api\Instances;
 
 use App\Clients\Factories\InstanceFactory;
 use App\Commands\AmezmoCommand;

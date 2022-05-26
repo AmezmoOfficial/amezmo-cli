@@ -15,16 +15,16 @@ it('displays a single instance', function () {
         ->artisan(command: 'instances:create')
         ->expectsChoice(
             question: 'What runtime do you want to use?',
-            answers: ['php', 'mysql'],
-            answer: 'php',
+            answer  : 'php',
+            answers : ['php', 'mysql'],
         )->expectsChoice(
             question: 'Which instance type do you want to use?',
-            answers: ['hobby', 'developer', 'business'],
-            answer: 'hobby',
+            answer  : 'hobby',
+            answers : ['hobby', 'developer', 'business'],
         )->expectsChoice(
             question: 'Which region do you want to use?',
-            answers: ['lb2-us', 'au2-au', 'uk3-uk', 'ca-ca'],
-            answer: 'uk3-uk',
+            answer  : 'uk3-uk',
+            answers : ['lb2-us', 'au2-au', 'uk3-uk', 'ca-ca'],
         )->expectsQuestion(
             question: 'What name do you want to use?',
             answer: 'test',
@@ -36,13 +36,12 @@ it('displays a single instance', function () {
             answer: '8.1',
         )->expectsChoice(
             question: 'Which composer version do you want to use?',
-            answers: ['default', '1', '2'],
-            answer: '2',
-        )
-        ->expectsChoice(
+            answer  : '2',
+            answers : ['default', '1', '2'],
+        )->expectsChoice(
             question: 'Which MySQL version do you want to use?',
-            answers: ['none', '5.7', '8'],
-            answer: '8',
+            answer  : '8',
+            answers : ['none', '5.7', '8'],
         )->expectsConfirmation(
             question: 'Do you want to enable MySQL?',
             answer: 'Yes',
@@ -55,7 +54,7 @@ it('displays a single instance', function () {
         )->expectsQuestion(
             question: 'What password fo you want to use?',
             answer: 'test',
-        )->assertSuccessful();
-
-
+        )->expectsOutputToContain(
+            string: 'Requesting new Instance to be created now.'
+        );
 });

@@ -6,10 +6,13 @@ namespace App\Clients;
 
 use App\Clients\Collections\InstanceCollection;
 use App\Clients\Collections\InstanceTypeCollection;
+use App\Clients\Collections\RegionCollection;
 use App\Clients\DataObjects\Instance;
 use App\Clients\DataObjects\InstanceType;
+use App\Clients\DataObjects\Region;
 use App\Clients\Factories\InstanceFactory;
 use App\Clients\Factories\InstanceTypeFactory;
+use App\Clients\Factories\RegionFactory;
 use App\Clients\Requests\CreateInstance;
 use App\Exceptions\AmezmoApiException;
 use Illuminate\Http\Client\PendingRequest;
@@ -26,6 +29,48 @@ class Amezmo
     public function setApiKey(string $token): void
     {
         $this->token = $token;
+    }
+
+    public function region(string $identifier): Region
+    {
+        $request = $this->buildRequest();
+
+        $response = $request->get(
+            url: "regions/$identifier",
+        );
+
+        if ($response->failed()) {
+            throw new AmezmoApiException(
+                response: $response,
+            );
+        }
+
+        return RegionFactory::make(
+            attributes: $response->json(),
+        );
+    }
+
+    public function regions(): RegionCollection
+    {
+        $request = $this->buildRequest();
+
+        $response = $request->get(
+            url: 'regions',
+        );
+
+        if ($response->failed()) {
+            throw new AmezmoApiException(
+                response: $response,
+            );
+        }
+
+        return new RegionCollection(
+            items: $response->collect()->map(fn ($region): Region =>
+                RegionFactory::make(
+                    attributes: $region,
+                ),
+            ),
+        );
     }
 
     public function terminate(string $identifier): Instance

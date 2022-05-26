@@ -19,7 +19,7 @@ final class Instance
      * @param string|null $description
      * @param RuntimeConfig $runtimeConfig
      * @param string $state
-     * @param array $trustedSSHIps
+     * @param null|array $trustedSSHIps
      * @param Carbon $createdAt
      * @param string $region
      * @param array<int,Environment> $environments
@@ -32,7 +32,7 @@ final class Instance
         public readonly null|string $description,
         public readonly RuntimeConfig $runtimeConfig,
         public readonly string $state,
-        public readonly array $trustedSSHIps,
+        public readonly null|array $trustedSSHIps,
         public readonly Carbon $createdAt,
         public readonly string $region,
         public readonly array $environments,
