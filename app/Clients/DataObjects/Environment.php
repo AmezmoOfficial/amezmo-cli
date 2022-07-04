@@ -18,14 +18,14 @@ final class Environment
      * @param Carbon|null $maintenanceModeEnabledAt
      * @param int $sshPort
      * @param string $appDomain
-     * @param int $currentDeploymentId
+     * @param int|null $currentDeploymentId
      * @param string $containerRootDirectory
      * @param string $appType
      * @param int $autoDeployEnabled
-     * @param string $repoOwner
-     * @param string $repoName
-     * @param string $branchName
-     * @param string $providerName
+     * @param string|null $repoOwner
+     * @param string|null $repoName
+     * @param string|null $branchName
+     * @param string|null $providerName
      * @param bool $maintenanceModeEnabled
      * @param int $autoInstallComposer
      * @param string $webroot
@@ -52,14 +52,14 @@ final class Environment
         public readonly null|Carbon $maintenanceModeEnabledAt,
         public readonly int $sshPort,
         public readonly string $appDomain,
-        public readonly int $currentDeploymentId,
+        public readonly null|int $currentDeploymentId,
         public readonly string $containerRootDirectory,
         public readonly string $appType,
         public readonly int $autoDeployEnabled,
-        public readonly string $repoOwner,
-        public readonly string $repoName,
-        public readonly string $branchName,
-        public readonly string $providerName,
+        public readonly null|string $repoOwner,
+        public readonly null|string $repoName,
+        public readonly null|string $branchName,
+        public readonly null|string $providerName,
         public readonly bool $maintenanceModeEnabled,
         public readonly int $autoInstallComposer,
         public readonly string $webroot,
@@ -115,6 +115,20 @@ final class Environment
             'default_composer_version' => $this->defaultComposerVersion,
             'auto_deploy_tag_patterns' => $this->autoDeployTagPatterns,
             'auto_deploy_branch_patterns' => $this->autoDeployBranchPatterns,
+        ];
+    }
+
+    /**
+     * @return array<string,string|int|null>
+     */
+    public function toEnvironmentsTable(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'domain' => $this->appDomain,
+            'branch' => $this->branchName,
+            'deployment_id' => $this->currentDeploymentId,
         ];
     }
 }

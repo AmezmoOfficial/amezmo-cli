@@ -4,16 +4,20 @@ declare(strict_types=1);
 
 namespace App\Clients;
 
+use App\Clients\Collections\EnvironmentCollection;
 use App\Clients\Collections\InstanceCollection;
 use App\Clients\Collections\InstanceTypeCollection;
 use App\Clients\Collections\RegionCollection;
+use App\Clients\DataObjects\Environment;
 use App\Clients\DataObjects\Instance;
 use App\Clients\DataObjects\InstanceType;
 use App\Clients\DataObjects\Region;
+use App\Clients\Factories\EnvironmentFactory;
 use App\Clients\Factories\InstanceFactory;
 use App\Clients\Factories\InstanceTypeFactory;
 use App\Clients\Factories\RegionFactory;
 use App\Clients\Requests\CreateInstance;
+use App\Clients\Requests\UpdateEnvironment;
 use App\Exceptions\AmezmoApiException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
@@ -29,6 +33,71 @@ class Amezmo
     public function setApiKey(string $token): void
     {
         $this->token = $token;
+    }
+
+    public function updateEnvironment(
+        UpdateEnvironment $requestData,
+        int $id,
+        string $name
+    ): Environment {
+        $request = $this->buildRequest();
+
+        $response = $request->patch(
+            url: "instances/$id/environments/$name/production",
+            data: $requestData->toArray(),
+        );
+
+        if ($response->failed()) {
+            throw new AmezmoApiException(
+                response: $response,
+            );
+        }
+
+        return EnvironmentFactory::make(
+            attributes: $response->json(),
+        );
+    }
+
+    public function environment(string $identifier, string $name): Environment
+    {
+        $request = $this->buildRequest();
+
+        $response = $request->get(
+            url: "instances/$identifier/environments/$name",
+        );
+
+        if ($response->failed()) {
+            throw new AmezmoApiException(
+                response: $response,
+            );
+        }
+
+        return EnvironmentFactory::make(
+            attributes: $response->json(),
+        );
+    }
+
+    public function environments(string $identifier): EnvironmentCollection
+    {
+        $request = $this->buildRequest();
+
+        $response = $request->get(
+            url: "instances/$identifier/environments",
+        );
+
+        if ($response->failed()) {
+            throw new AmezmoApiException(
+                response: $response,
+            );
+        }
+
+        return new EnvironmentCollection(
+            items: $response->collect()->map(fn ($environment): Environment =>
+                EnvironmentFactory::make(
+                    attributes: $environment,
+                ),
+            ),
+        );
     }
 
     public function region(string $identifier): Region
